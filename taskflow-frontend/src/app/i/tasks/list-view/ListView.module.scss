@@ -1,0 +1,96 @@
+.table {
+	@apply w-full;
+
+	.header {
+		@apply grid items-center text-xs;
+		grid-template-columns: 1fr 0.6fr 0.6fr 0.3fr;
+
+		@screen md {
+			@apply text-sm;
+			grid-template-columns: 1.1fr 0.4fr 0.4fr 0.1fr;
+		}
+	}
+
+	.header,
+	.parentsWrapper .row,
+	.parentsWrapper .colHeading {
+		@apply rounded border-t border-[#222222] text-left whitespace-nowrap;
+
+		> div {
+			@apply border-r border-[#222222] py-0.5 px-2;
+
+			@screen md {
+				@apply py-1 px-4; 
+			}
+
+			&:last-child {
+				@apply border-0;
+			}
+		}
+	}
+
+	.colHeading {
+		@apply rounded border-t border-[#222222] text-left w-auto text-xs pl-4;
+
+		@screen md {
+			@apply text-sm pl-7;
+		}
+
+		> div {
+			@apply border-r border-[#222222] py-0.5 px-2 font-medium;
+
+			@screen md {
+				@apply py-1 px-4 font-semibold text-xl;
+			}
+
+			&:last-child {
+				@apply border-0;
+			}
+		}
+	}
+
+	.parentsWrapper {
+		.colHeading {
+			@apply hover:bg-transparent;
+			background-color: #0e0f0f;
+		}
+
+		.addRow {
+			@apply py-0.5 px-2 border-t border-[#222222];
+
+			@screen md {
+				@apply py-1 px-4;
+			}
+		}
+
+		.row {
+			@apply font-normal flex items-center relative text-xs gap-1;
+
+			@screen md {
+				@apply grid text-sm ;
+				grid-template-columns: 1.4fr 0.5fr 0.5fr 0.1fr;
+			}
+
+			&.completed {
+				> div > span > input {
+					@apply italic line-through opacity-50;
+				}
+			}
+
+			&:hover {
+				@apply bg-[#1c1f1f];
+			}
+
+			> div > span {
+				.grip {
+					@apply opacity-20 transition-opacity -ml-2 -mr-0.5;
+
+					&:hover,
+					&:active {
+						@apply opacity-100;
+					}
+				}
+			}
+		}
+	}
+}
