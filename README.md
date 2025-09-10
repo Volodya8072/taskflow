@@ -1,6 +1,6 @@
 # TaskFlow
 
-> Monorepo for the TaskFlow project  
+> Monorepo for the TaskFlow project — an event planning application with drag-and-drop functionality.
 > Task management system with a frontend in Next.js and a backend in NestJS.
 
 ---
