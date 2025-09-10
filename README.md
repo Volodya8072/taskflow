@@ -1,18 +1,18 @@
 # TaskFlow
 
-> Монорепозиторій для проекту TaskFlow  
-> Система управління завданнями з фронтендом на Next.js і бекендом на NestJS.
+> Monorepo for the TaskFlow project  
+> Task management system with a frontend in Next.js and a backend in NestJS.
 
 ---
 
-## 📂 Структура проекту
+## 📂 Project Structure
 
-- **frontend/** — користувацький інтерфейс, відповідає за взаємодію з користувачем  
-- **backend/** — серверна частина, API та бізнес-логіка  
+- **frontend/** — user interface, handles user interactions  
+- **backend/** — server-side, API and business logic  
 
 ---
 
-## ⚡ Стек технологій
+## ⚡ Technology Stack
 
 ### Frontend
 - Next.js  
@@ -37,19 +37,20 @@
 - passport-jwt  
 - cookie-parser  
 
-### База даних
+### Database
 - PostgreSQL  
 
-### Деплой
-- **Frontend:** Vercel, GitHub
+### Deployment
+- **Frontend:** Vercel, GitHub  
 - **Backend:** Render  
 
 ---
 
-## 🚀 Локальний запуск
+## 🚀 Local Setup
 
-### 1️⃣ Фронтенд
+### 1️⃣ Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
+
