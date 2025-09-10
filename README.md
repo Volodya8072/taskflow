@@ -44,13 +44,4 @@
 - **Frontend:** Vercel, GitHub  
 - **Backend:** Render  
 
----
-
-## 🚀 Local Setup
-
-### 1️⃣ Frontend
-```bash
-cd frontend
-npm install
-npm run dev
 
