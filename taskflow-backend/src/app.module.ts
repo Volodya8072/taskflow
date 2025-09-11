@@ -6,11 +6,14 @@ import { TaskModule } from './task/task.module'
 import { UserModule } from './user/user.module'
 
 @Module({
-	imports: [
-		ConfigModule.forRoot(),
-		AuthModule,
-		UserModule,
-		TaskModule,
-	]
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    AuthModule,
+    UserModule,
+    TaskModule,
+  ],
 })
 export class AppModule {}
+
