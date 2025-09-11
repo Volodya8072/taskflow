@@ -71,8 +71,8 @@ export function Auth() {
 				/>
 
 				<div className='flex items-center gap-5 justify-center'>
-					<Button onClick={() => setIsLoginForm(true)}>Login</Button>
-					<Button onClick={() => setIsLoginForm(false)}>Register</Button>
+					<Button type="submit" onClick={() => setIsLoginForm(true)}>Login</Button>
+					<Button type="submit" onClick={() => setIsLoginForm(false)}>Register</Button>
 				</div>
 			</form>
 		</div>
