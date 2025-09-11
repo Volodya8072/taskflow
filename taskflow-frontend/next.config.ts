@@ -3,7 +3,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:3001/api/:path*', 
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
       },
     ]
   },
@@ -12,7 +12,7 @@ const nextConfig = {
       {
         source: '/',
         destination: '/auth',
-        permanent: false, 
+        permanent: false,
       },
     ]
   },

@@ -10,8 +10,8 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'http://localhost:3000', // локальна розробка
-      'https://<твій-frontend>.vercel.app' // фронтенд на Vercel
+      'http://localhost:3000', 
+      'https://taskflow-eight-pied.vercel.app' 
     ],
     credentials: true,
     exposedHeaders: ['set-cookie'],
