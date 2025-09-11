@@ -14,8 +14,8 @@ import { AppController } from './app.controller'
     AuthModule,
     UserModule,
     TaskModule,
-    AppController
   ],
+  controllers: [AppController]
 })
 export class AppModule {}
 
