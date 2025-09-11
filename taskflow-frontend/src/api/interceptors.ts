@@ -3,7 +3,7 @@ import { errorCatch } from './error'
 import { getAccessToken, removeAccessToken } from '@/services/auth-token.service'
 import { authService } from '@/services/auth.service'
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 const axiosClassic = axios.create({
   baseURL: BASE_URL,
@@ -17,10 +17,8 @@ const axiosWithAuth = axios.create({
   withCredentials: true,
 })
 
-// Додаємо токен до всіх запитів
 axiosWithAuth.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = getAccessToken()
-  console.log('Sending token:', token) // дебаг
   if (token) {
     config.headers = config.headers ?? {}
     config.headers['Authorization'] = `Bearer ${token}`
@@ -28,7 +26,6 @@ axiosWithAuth.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config
 })
 
-// Обробка відповіді та автоматичне оновлення токена
 axiosWithAuth.interceptors.response.use(
   response => response,
   async (error: AxiosError & { config?: InternalAxiosRequestConfig & { _isRetry?: boolean } }) => {
