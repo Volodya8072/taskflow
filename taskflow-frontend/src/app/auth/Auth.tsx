@@ -11,9 +11,7 @@ import { Button } from '@/components/ui/buttons/Button'
 import { Field } from '@/components/ui/fields/Field'
 
 import { IAuthForm } from '@/types/auth.types'
-
 import { DASHBOARD_PAGES } from '@/config/pages-url.config'
-
 import { authService } from '@/services/auth.service'
 
 export function Auth() {
@@ -22,17 +20,18 @@ export function Auth() {
 	})
 
 	const [isLoginForm, setIsLoginForm] = useState(false)
-
 	const { push } = useRouter()
 
-	const { mutate } = useMutation({
-		mutationKey: ['auth'],
+	const { mutate, isPending } = useMutation({
 		mutationFn: (data: IAuthForm) =>
 			authService.main(isLoginForm ? 'login' : 'register', data),
 		onSuccess() {
-			toast.success('Successfully login!')
+			toast.success(isLoginForm ? 'Successfully logged in!' : 'Successfully registered!')
 			reset()
 			push(DASHBOARD_PAGES.HOME)
+		},
+		onError(error: any) {
+			toast.error(error?.response?.data?.message || 'Something went wrong!')
 		}
 	})
 
@@ -54,9 +53,7 @@ export function Auth() {
 					placeholder='Enter email:'
 					type='email'
 					extra='mb-4'
-					{...register('email', {
-						required: 'Email is required!'
-					})}
+					{...register('email', { required: 'Email is required!' })}
 				/>
 
 				<Field
@@ -64,20 +61,30 @@ export function Auth() {
 					label='Password: '
 					placeholder='Enter password: '
 					type='password'
-					{...register('password', {
-						required: 'Password is required!'
-					})}
+					{...register('password', { required: 'Password is required!' })}
 					extra='mb-6'
 				/>
 
 				<div className='flex items-center gap-5 justify-center mb-4'>
-					<Button type="button" onClick={() => setIsLoginForm(true)}>Login</Button>
-					<Button type="button" onClick={() => setIsLoginForm(false)}>Register</Button>
+					<Button
+						type='button'
+						onClick={() => setIsLoginForm(true)}
+						className={isLoginForm ? 'bg-[#353535]' : ''}
+					>
+						Login
+					</Button>
+					<Button
+						type='button'
+						onClick={() => setIsLoginForm(false)}
+						className={!isLoginForm ? 'bg-[#353535]' : ''}
+					>
+						Register
+					</Button>
 				</div>
 
-					<Button type="submit">
-						{isLoginForm ? 'Login' : 'Register'}
-					</Button>
+				<Button type='submit' disabled={isPending}>
+					{isLoginForm ? 'Login' : 'Register'}
+				</Button>
 			</form>
 		</div>
 	)
