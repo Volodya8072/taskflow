@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Get,
 	HttpCode,
 	Post,
 	Req,
@@ -16,6 +17,11 @@ import { AuthDto } from './dto/auth.dto'
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
+
+	@Get()
+	getHello() {
+		return { message: 'API is running 🚀' }
+	}
 
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
