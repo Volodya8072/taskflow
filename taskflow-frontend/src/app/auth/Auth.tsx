@@ -70,19 +70,26 @@ export function Auth() {
         <div className='flex items-center gap-5 justify-center mb-4'>
           <Button
             type='button'
-            onClick={() => setIsLoginForm(true)}
             className={isLoginForm ? 'bg-[#353535]' : ''}
+            onClick={() => {
+              setIsLoginForm(true)
+              handleSubmit(onSubmit)()
+            }}
           >
             Login
           </Button>
           <Button
             type='button'
-            onClick={() => setIsLoginForm(false)}
             className={!isLoginForm ? 'bg-[#353535]' : ''}
+            onClick={() => {
+              setIsLoginForm(false)
+              handleSubmit(onSubmit)()
+            }}
           >
             Register
           </Button>
         </div>
+
       </form>
     </div>
   )
