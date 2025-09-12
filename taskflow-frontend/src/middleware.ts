@@ -4,31 +4,27 @@ import { EnumTokens } from './services/auth-token.service'
 
 export function middleware(request: NextRequest) {
   const { cookies, nextUrl } = request
-  const refreshToken = cookies.get(EnumTokens.REFRESH_TOKEN)?.value
+  const accessToken = cookies.get(EnumTokens.ACCESS_TOKEN)?.value
 
   const isAuthPage = nextUrl.pathname.startsWith('/auth')
   const isDashboardPage = nextUrl.pathname.startsWith('/i')
-  const isRootPage = nextUrl.pathname === '/'
+  const isRoot = nextUrl.pathname === '/'
 
-  if (isAuthPage && refreshToken) {
+  if (isAuthPage && accessToken) {
     return NextResponse.redirect(new URL(DASHBOARD_PAGES.HOME, request.url))
   }
 
-  if (isRootPage) {
-    if (refreshToken) {
-      return NextResponse.redirect(new URL(DASHBOARD_PAGES.HOME, request.url))
-    } else {
-      return NextResponse.redirect(new URL('/auth', request.url))
-    }
+  if (!isAuthPage && !accessToken) {
+    return NextResponse.redirect(new URL('/auth', request.url))
   }
 
-  if (isDashboardPage && !refreshToken) {
-    return NextResponse.redirect(new URL('/auth', request.url))
+  if (isRoot) {
+    return NextResponse.redirect(new URL(isAuthPage ? '/auth' : DASHBOARD_PAGES.HOME, request.url))
   }
 
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/', '/auth/:path*', '/i/:path*']
+  matcher: ['/', '/auth', '/i/:path*'],
 }

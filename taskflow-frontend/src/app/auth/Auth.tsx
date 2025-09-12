@@ -16,7 +16,7 @@ import { authService } from '@/services/auth.service'
 
 export function Auth() {
   const { register, handleSubmit, reset } = useForm<IAuthForm>({ mode: 'onChange' })
-  const [isLoginForm, setIsLoginForm] = useState(false)
+  const [isLoginForm, setIsLoginForm] = useState(true)
   const { push } = useRouter()
 
   const { mutate, isPending } = useMutation({
@@ -31,11 +31,12 @@ export function Auth() {
     },
     onError(error: any) {
       toast.error(error?.response?.data?.message || 'Something went wrong!')
-    },
+    }
   })
 
-  const onSubmit: SubmitHandler<IAuthForm> = data => {
-    mutate(data)
+  const handleAuth = (login: boolean) => {
+    setIsLoginForm(login)
+    handleSubmit((data) => mutate(data))()
   }
 
   return (
@@ -62,26 +63,10 @@ export function Auth() {
         />
 
         <div className="flex items-center gap-5 justify-center mb-4">
-          <Button
-            type="button"
-            className={isLoginForm ? 'bg-[#353535]' : ''}
-            onClick={() => {
-              setIsLoginForm(true)
-              handleSubmit(onSubmit)()
-            }}
-            disabled={isPending}
-          >
+          <Button type="button" onClick={() => handleAuth(true)} disabled={isPending}>
             Login
           </Button>
-          <Button
-            type="button"
-            className={!isLoginForm ? 'bg-[#353535]' : ''}
-            onClick={() => {
-              setIsLoginForm(false)
-              handleSubmit(onSubmit)()
-            }}
-            disabled={isPending}
-          >
+          <Button type="button" onClick={() => handleAuth(false)} disabled={isPending}>
             Register
           </Button>
         </div>
