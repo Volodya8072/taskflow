@@ -2,8 +2,7 @@
 
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { Heading } from '@/components/ui/Heading'
@@ -19,16 +18,15 @@ export function Auth() {
     mode: 'onChange'
   })
 
-  const [isLoginForm, setIsLoginForm] = useState(false)
   const { push } = useRouter()
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: IAuthForm) => {
-      const response = await authService.main(isLoginForm ? 'login' : 'register', data)
+    mutationFn: async (data: IAuthForm & { type: 'login' | 'register' }) => {
+      const response = await authService.main(data.type, data)
       return response.data
     },
     onSuccess() {
-      toast.success(isLoginForm ? 'Successfully logged in!' : 'Successfully registered!')
+      toast.success('Successfully logged in!')
       reset()
       push(DASHBOARD_PAGES.HOME)
     },
@@ -37,59 +35,45 @@ export function Auth() {
     }
   })
 
-  const onSubmit: SubmitHandler<IAuthForm> = data => {
-    mutate(data)
+  const onLogin: SubmitHandler<IAuthForm> = (data) => {
+    mutate({ ...data, type: 'login' })
+  }
+
+  const onRegister: SubmitHandler<IAuthForm> = (data) => {
+    mutate({ ...data, type: 'register' })
   }
 
   return (
-    <div className='flex min-h-screen'>
-      <form
-        className='w-45 md:w-1/4 m-auto shadow bg-[#262b2a] rounded-xl p-6 md:p-10'
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Heading title='Auth' />
+    <div className="flex min-h-screen">
+      <form className="w-45 md:w-1/4 m-auto shadow bg-[#262b2a] rounded-xl p-6 md:p-10">
+        <Heading title="Auth" />
 
         <Field
-          id='email'
-          label='Email:'
-          placeholder='Enter email:'
-          type='email'
-          extra='mb-4'
+          id="email"
+          label="Email:"
+          placeholder="Enter email:"
+          type="email"
+          extra="mb-4"
           {...register('email', { required: 'Email is required!' })}
         />
 
         <Field
-          id='password'
-          label='Password: '
-          placeholder='Enter password: '
-          type='password'
-          extra='mb-6'
+          id="password"
+          label="Password:"
+          placeholder="Enter password:"
+          type="password"
+          extra="mb-6"
           {...register('password', { required: 'Password is required!' })}
         />
 
-        <div className='flex items-center gap-5 justify-center mb-4'>
-          <Button
-            type='button'
-            className={isLoginForm ? 'bg-[#353535]' : ''}
-            onClick={() => {
-              setIsLoginForm(true)
-              handleSubmit(onSubmit)()
-            }}
-          >
+        <div className="flex items-center gap-5 justify-center mb-4">
+          <Button type="button" onClick={handleSubmit(onLogin)} disabled={isPending}>
             Login
           </Button>
-          <Button
-            type='button'
-            className={!isLoginForm ? 'bg-[#353535]' : ''}
-            onClick={() => {
-              setIsLoginForm(false)
-              handleSubmit(onSubmit)()
-            }}
-          >
+          <Button type="button" onClick={handleSubmit(onRegister)} disabled={isPending}>
             Register
           </Button>
         </div>
-
       </form>
     </div>
   )
