@@ -3,8 +3,7 @@ import { DASHBOARD_PAGES } from './config/pages-url.config'
 import { EnumTokens } from './services/auth-token.service'
 
 export function middleware(request: NextRequest) {
-  const { nextUrl, cookies } = request
-
+  const { cookies, nextUrl } = request
   const refreshToken = cookies.get(EnumTokens.REFRESH_TOKEN)?.value
 
   const isAuthPage = nextUrl.pathname.startsWith('/auth')
@@ -14,8 +13,6 @@ export function middleware(request: NextRequest) {
   if (isAuthPage && refreshToken) {
     return NextResponse.redirect(new URL(DASHBOARD_PAGES.HOME, request.url))
   }
-
-  if (isAuthPage) return NextResponse.next()
 
   if (isRootPage) {
     if (refreshToken) {
@@ -30,4 +27,8 @@ export function middleware(request: NextRequest) {
   }
 
   return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/', '/auth/:path*', '/i/:path*']
 }
