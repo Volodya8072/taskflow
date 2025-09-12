@@ -83,18 +83,6 @@ export function Auth() {
             Register
           </Button>
         </div>
-
-        <div className='flex justify-center gap-4'>
-          {isLoginForm ? (
-            <Button type='button' onClick={handleSubmit(onSubmit)} disabled={isPending}>
-              Login
-            </Button>
-          ) : (
-            <Button type='button' onClick={handleSubmit(onSubmit)} disabled={isPending}>
-              Register
-            </Button>
-          )}
-        </div>
       </form>
     </div>
   )
