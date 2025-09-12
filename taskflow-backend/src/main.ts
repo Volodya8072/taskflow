@@ -8,10 +8,20 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.use(cookieParser());
 
+  const allowedOrigins = [
+    'http://localhost:3000',       // локальний фронтенд
+    'https://taskflow.vercel.app', // основний продакшн домен
+  ];
+
   app.enableCors({
-    origin: [
-      'https://taskflow-9g9q.vercel.app', 
-    ],
+    origin: (origin, callback) => {
+      // Дозволяємо localhost або будь-який піддомен vercel.app
+      if (!origin || origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     exposedHeaders: ['set-cookie'],
   });
