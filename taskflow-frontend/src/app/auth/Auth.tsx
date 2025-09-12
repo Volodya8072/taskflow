@@ -2,7 +2,8 @@
 
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { Heading } from '@/components/ui/Heading'
@@ -14,33 +15,27 @@ import { DASHBOARD_PAGES } from '@/config/pages-url.config'
 import { authService } from '@/services/auth.service'
 
 export function Auth() {
-  const { register, handleSubmit, reset } = useForm<IAuthForm>({
-    mode: 'onChange'
-  })
-
+  const { register, handleSubmit, reset } = useForm<IAuthForm>({ mode: 'onChange' })
+  const [isLoginForm, setIsLoginForm] = useState(false)
   const { push } = useRouter()
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: IAuthForm & { type: 'login' | 'register' }) => {
-      const response = await authService.main(data.type, data)
+    mutationFn: async (data: IAuthForm) => {
+      const response = await authService.main(isLoginForm ? 'login' : 'register', data)
       return response.data
     },
     onSuccess() {
-      toast.success('Successfully logged in!')
+      toast.success(isLoginForm ? 'Successfully logged in!' : 'Successfully registered!')
       reset()
       push(DASHBOARD_PAGES.HOME)
     },
     onError(error: any) {
       toast.error(error?.response?.data?.message || 'Something went wrong!')
-    }
+    },
   })
 
-  const onLogin: SubmitHandler<IAuthForm> = (data) => {
-    mutate({ ...data, type: 'login' })
-  }
-
-  const onRegister: SubmitHandler<IAuthForm> = (data) => {
-    mutate({ ...data, type: 'register' })
+  const onSubmit: SubmitHandler<IAuthForm> = data => {
+    mutate(data)
   }
 
   return (
@@ -67,10 +62,26 @@ export function Auth() {
         />
 
         <div className="flex items-center gap-5 justify-center mb-4">
-          <Button type="button" onClick={handleSubmit(onLogin)} disabled={isPending}>
+          <Button
+            type="button"
+            className={isLoginForm ? 'bg-[#353535]' : ''}
+            onClick={() => {
+              setIsLoginForm(true)
+              handleSubmit(onSubmit)()
+            }}
+            disabled={isPending}
+          >
             Login
           </Button>
-          <Button type="button" onClick={handleSubmit(onRegister)} disabled={isPending}>
+          <Button
+            type="button"
+            className={!isLoginForm ? 'bg-[#353535]' : ''}
+            onClick={() => {
+              setIsLoginForm(false)
+              handleSubmit(onSubmit)()
+            }}
+            disabled={isPending}
+          >
             Register
           </Button>
         </div>
